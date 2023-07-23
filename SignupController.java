@@ -1,7 +1,6 @@
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -42,51 +41,29 @@ public class SignupController {
     }
 
     @FXML
-    boolean SPasswordEntered(ActionEvent event) throws IOException {
-
-        ArrayList<String> Password = new ArrayList<>();
-
-
-        if(SPassword.getText().length() >= 8){
-
-            Password.add(SPassword.getText());
-
-            BufferedWriter writer = new BufferedWriter(new FileWriter("Passwords.txt", true));
-            writer.write(SPassword.getText() + "\n");
-            writer.newLine();
-            writer.close();
-            
+    boolean SUsernameEntered(ActionEvent event) throws IOException{
+        if(SUsername.getText().length() > 4){
             return true;
         }
-        else{
-            return false;
-        }
+        return false;
     }
 
     @FXML
-    boolean SUsernameEntered(ActionEvent event) throws IOException {
-
-        ArrayList<String> Username = new ArrayList<>();
-
-        if(SUsername.getText().length() >=4){
-            
-            Username.add(SUsername.getText());
-
-            BufferedWriter writer2 = new BufferedWriter(new FileWriter("Credentials.txt", true));
-            writer2.write(SUsername.getText() + "\n");
-            writer2.newLine();
-            writer2.close();
-
-            return true;
+         boolean SPasswordEntered(ActionEvent event) throws IOException {  
+            if (SPassword.getText().length() >= 8) {
+                BufferedWriter writer = new BufferedWriter(new FileWriter("Credentials.txt", true));
+                writer.write(SUsername.getText() + "," + SPassword.getText() + "\n");
+                writer.close();
+                return true;
+            } else {
+                return false;
+            }
         }
-        else{
-            return false;
-        }
-    }
+        
 
     @FXML
     void SignUp(ActionEvent event) throws IOException {
-        if(SPasswordEntered(event) && SUsernameEntered(event)){
+        if(SPasswordEntered(event)){
 
             Stage stage = (Stage) back.getScene().getWindow();
             Stage primaryStage = new Stage();

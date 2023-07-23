@@ -42,37 +42,41 @@ public class LoginController {
 
     @FXML
     void LogIN(ActionEvent event) throws IOException {
-        String enteredUsername = UsernameEntered.getText();  // Replace with actual entered username
-        String enteredPassword = PasswordEntered.getText();
-        boolean isAuthenticated = false;
-        String UsernameEnter = UsernameEntered.getText();
-        String PasswordEnter = PasswordEntered.getText();
-        if(!UsernameEnter.isEmpty() || !PasswordEnter.isEmpty()){
-            // Read the username file
-            BufferedReader usernameReader = new BufferedReader(new FileReader("Credentials.txt"));
-            String storedUsername;
-
-            while ((storedUsername = usernameReader.readLine()) != null) {
-                // Check if the entered username matches the stored username
-                if (enteredUsername.equals(storedUsername)) {
-                    // Read the password file
-                    BufferedReader passwordReader = new BufferedReader(new FileReader("Passwords.txt"));
-                    String storedPassword;
-
-                    while ((storedPassword = passwordReader.readLine()) != null) {
-                        // Check if the entered password matches the stored password
-                        if (enteredPassword.equals(storedPassword)) {
-                            isAuthenticated = true;
-                            break;
-                        }
+        //void LogIN(ActionEvent event) throws IOException {
+            String enteredUsername = UsernameEntered.getText();
+            String enteredPassword = PasswordEntered.getText();
+            boolean isAuthenticated = false;
+        
+            if (!enteredUsername.isEmpty() && !enteredPassword.isEmpty()) {
+                // Read the credentials file
+                BufferedReader credentialsReader = new BufferedReader(new FileReader("Credentials.txt"));
+                String line;
+        
+                while ((line = credentialsReader.readLine()) != null) {
+                    String[] credentials = line.split(",");
+                    String storedUsername = credentials[0];
+                    String storedPassword = credentials[1];
+        
+                    // Check if the entered username and password match the stored credentials
+                    if (enteredUsername.equals(storedUsername) && enteredPassword.equals(storedPassword)) {
+                        isAuthenticated = true;
+                        break;
                     }
-
-                    passwordReader.close();
-                    break;
                 }
+        
+                credentialsReader.close();
+        
+                if (isAuthenticated) {
+                    // Successful login logic
+                } else {
+                    lbl.setText("Invalid username or password");
+                }
+            } else { 
+                lbl.setText("Enter both Username and Password");
             }
-
-            usernameReader.close();
+        
+        
+       
 
         if (isAuthenticated) {
             Stage stage = (Stage) back.getScene().getWindow();
@@ -88,10 +92,7 @@ public class LoginController {
         }
     }
     //if login pressed without details.s
-    else{ 
-        lbl.setText("Enter both Username and Password");
-    }
-    }
+    
 
     @FXML
     void PassEntered(ActionEvent event) {
